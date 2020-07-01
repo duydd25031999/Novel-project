@@ -38,4 +38,8 @@ public class ApiCaller {
     public void getNovelDetail(String url, Response.Listener successListener, Response.ErrorListener errorListener, Context context) {
         callRequest(Request.Method.GET, url, null, successListener, errorListener, context);
     }
+
+    public void getChapter(String url, Response.Listener successListener, Response.ErrorListener errorListener, Context context) {
+        callRequest(Request.Method.GET, url, null, successListener, errorListener, context);
+    }
 }

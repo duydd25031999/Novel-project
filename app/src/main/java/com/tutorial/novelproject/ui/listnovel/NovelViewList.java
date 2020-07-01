@@ -58,6 +58,9 @@ public class NovelViewList {
             public void onClick(View v) {
                 Intent intent = new Intent(context, ReadChapterActivity.class);
                 intent.putExtra(ReadChapterActivity.CHAPTER_URL, novelCard.getLastChapterUrl());
+                intent.putExtra(ReadChapterActivity.CHAPTER_TITLE, novelCard.getLastChapterTitle());
+                intent.putExtra(ReadChapterActivity.VOLUME_TITLE, novelCard.getLastVol());
+                intent.putExtra(ReadChapterActivity.NOVEL_URL, novelCard.getUrl());
                 context.startActivity(intent);
             }
         });

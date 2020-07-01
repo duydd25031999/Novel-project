@@ -29,6 +29,7 @@ import java.util.List;
 
 public class DetailNovelActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
     public final static String NOVEL_URL = "novel_url";
+    public String novelUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class DetailNovelActivity extends AppCompatActivity implements Response.L
         setContentView(R.layout.activity_detail_novel);
 
         Intent intent = getIntent();
-        String novelUrl = intent.getStringExtra(NOVEL_URL);
+        novelUrl = intent.getStringExtra(NOVEL_URL);
 
         ApiCaller apiCaller = new ApiCaller();
         apiCaller.getNovelDetail(novelUrl, this, this, this);
@@ -77,13 +78,19 @@ public class DetailNovelActivity extends AppCompatActivity implements Response.L
 
     private void setChapterList(ArrayList<Volumne> volumnes) {
         ExpandableListView expandableListView = findViewById(R.id.vol_list);
-        ChapterListAdapter chapterListAdapter = new ChapterListAdapter(this, volumnes);
+        ChapterListAdapter chapterListAdapter = new ChapterListAdapter(this, volumnes, novelUrl);
         expandableListView.setAdapter(chapterListAdapter);
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Log.e("get response", error.getMessage());
+        String message = error.getMessage();
+        if (message == null) {
+            Log.e("get response", "no message");
+        } else {
+            Log.e("get response", message);
+        }
+        onBackPressed();
     }
 
     @Override
@@ -96,6 +103,7 @@ public class DetailNovelActivity extends AppCompatActivity implements Response.L
             setChapterList(novelDetail.getVolumnes());
         } catch (JSONException e) {
             Log.e("json parser", e.getMessage());
+            onBackPressed();
         }
     }
 }

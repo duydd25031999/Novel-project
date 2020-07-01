@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.ReadChapterActivity;
 import com.tutorial.novelproject.model.ChapterRow;
 import com.tutorial.novelproject.model.Volumne;
+import com.tutorial.novelproject.utils.DownloadChapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,13 +23,15 @@ import java.util.List;
 public class ChapterListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private ArrayList<Volumne> volumes;
+    private String novelUrl;
 
     public ChapterListAdapter() {
     }
 
-    public ChapterListAdapter(Context context, ArrayList<Volumne> volumes) {
+    public ChapterListAdapter(Context context, ArrayList<Volumne> volumes, String novelUrl) {
         this.context = context;
         this.volumes = volumes;
+        this.novelUrl = novelUrl;
     }
 
     @Override
@@ -84,18 +88,33 @@ public class ChapterListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        ChapterRow chapter = (ChapterRow) getChild(groupPosition, childPosition);
+        Volumne volumne = volumes.get(groupPosition);
+        ChapterRow chapter = volumne.getChapters().get(childPosition);
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.chapter_row, parent, false);
         }
-        ((TextView) convertView).setText(chapter.getTitle());
-        convertView.setOnClickListener(new View.OnClickListener() {
+
+        TextView txtTitle = convertView.findViewById(R.id.chapter_title);
+        txtTitle.setText(chapter.getTitle());
+        txtTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ReadChapterActivity.class);
                 intent.putExtra(ReadChapterActivity.CHAPTER_URL, chapter.getUrl());
+                intent.putExtra(ReadChapterActivity.CHAPTER_TITLE, chapter.getTitle());
+                intent.putExtra(ReadChapterActivity.VOLUME_TITLE, volumne.getTitle());
+                intent.putExtra(ReadChapterActivity.NOVEL_URL, novelUrl);
                 context.startActivity(intent);
+            }
+        });
+
+        ImageView btnDownload = convertView.findViewById(R.id.chapter_download);
+        btnDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DownloadChapter downloadChapter = new DownloadChapter(context);
+                downloadChapter.execute(chapter.getUrl());
             }
         });
 

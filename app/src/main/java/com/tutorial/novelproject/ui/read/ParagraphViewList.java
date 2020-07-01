@@ -28,6 +28,7 @@ public class ParagraphViewList {
     }
 
     public void listView(List<String> listParagraph) {
+        layout.removeAllViews();
         for (String paragragh : listParagraph) {
             TextView view = createView(paragragh);
             layout.addView(view);
