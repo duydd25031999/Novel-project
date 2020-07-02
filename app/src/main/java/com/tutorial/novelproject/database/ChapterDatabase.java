@@ -86,19 +86,33 @@ public class ChapterDatabase extends SQLiteOpenHelper {
         return 1l;
     }
 
-    public boolean chapterExited(String url) {
-        String query = "SELECT COUNT(*) FROM " + TABLE_CHAPTER
+    public ChapterDetail findByUrl(String url) {
+        String chapterQuery = "SELECT * FROM " + TABLE_CHAPTER
+            + " WHERE " + COLUMN_URL + " LIKE '%" + url + "%'";
+        String contentrQuery = "SELECT " + COLUMN_CONTENT_TEXT + " FROM " + TABLE_CHAPTER_CONTENT
             + " WHERE " + COLUMN_URL + " LIKE '%" + url + "%'";
 
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor chapterCursor = db.rawQuery(chapterQuery, null);
 
-        if (cursor.moveToFirst()) {
-            int count = cursor.getInt(0);
-            return count > 0;
+        if (chapterCursor.moveToFirst()) {
+            ChapterDetail chapter = new ChapterDetail();
+            String prevUrl = chapterCursor.getString(2);
+            String nextUrl = chapterCursor.getString(3);
+            chapter.setUrl(url);
+            chapter.setPrevUrl(prevUrl);
+            chapter.setNextUrl(nextUrl);
+
+            Cursor contentCursor = db.rawQuery(contentrQuery, null);
+            while (contentCursor.moveToNext()) {
+                String content = contentCursor.getString(0);
+                chapter.getContent().add(content);
+            }
+
+            return chapter;
         }
 
-        return false;
+        return null;
     }
 
     public ArrayList<ChapterDetail> getAllDowloaded() {

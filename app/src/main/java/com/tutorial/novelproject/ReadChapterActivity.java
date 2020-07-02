@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.tutorial.novelproject.database.ChapterDatabase;
 import com.tutorial.novelproject.model.ChapterDetail;
 import com.tutorial.novelproject.ui.read.ParagraphViewList;
 import com.tutorial.novelproject.utils.ApiCaller;
@@ -35,10 +36,11 @@ public class ReadChapterActivity extends AppCompatActivity implements Response.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_chapter);
-        getInitData();
 
         LinearLayout paragraphList = findViewById(R.id.paragraph_list);
         paragraphViewList = new ParagraphViewList(paragraphList, this);
+
+        getInitData();
     }
 
     private void getInitData() {
@@ -49,8 +51,7 @@ public class ReadChapterActivity extends AppCompatActivity implements Response.L
         String novelUrl = intent.getStringExtra(NOVEL_URL);
 
         setConstText(chapterTitle, volumeTitle, novelUrl);
-        ApiCaller apiCaller = new ApiCaller();
-        apiCaller.getChapter(chapterUrl, this, this, this);
+        executeChapterUrl(chapterUrl);
     }
 
     private void setConstText(String chapterTitle, String volumeTitle, String novelUrl) {
@@ -86,25 +87,38 @@ public class ReadChapterActivity extends AppCompatActivity implements Response.L
     public void onResponse(JSONObject response) {
         try {
             ChapterDetail chapterDetail = ChapterDetail.createFromJson(response);
-
-            setMoveChapEvent(R.id.previous_chapter, chapterDetail.getPrevUrl());
-            setMoveChapEvent(R.id.next_chapter, chapterDetail.getNextUrl());
-            paragraphViewList.listView(chapterDetail.getContent());
+            setChapterDetail(chapterDetail);
         } catch (JSONException e) {
             Log.e("json parser", e.getMessage());
             onBackPressed();
         }
     }
 
+    private void executeChapterUrl(String url) {
+        ChapterDatabase database = new ChapterDatabase(this, null);
+        ChapterDetail chapter = database.findByUrl(url);
+        if (chapter == null) {
+            ApiCaller apiCaller = new ApiCaller();
+            apiCaller.getChapter(url, this, this, this);
+        } else {
+            setChapterDetail(chapter);
+            Log.i("executeChapterUrl", "Get chapter from sQLite");
+        }
+    }
+
+    private void setChapterDetail(ChapterDetail chapterDetail) {
+        setMoveChapEvent(R.id.previous_chapter, chapterDetail.getPrevUrl());
+        setMoveChapEvent(R.id.next_chapter, chapterDetail.getNextUrl());
+        paragraphViewList.listView(chapterDetail.getContent());
+    }
+
     private void setMoveChapEvent(int btnId, String url) {
         LinearLayout btn = findViewById(btnId);
-        ReadChapterActivity that = this;
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("setMoveChapEvent", url);
-                ApiCaller apiCaller = new ApiCaller();
-                apiCaller.getChapter(url, that, that, that);
+                executeChapterUrl(url);
             }
         });
     }
