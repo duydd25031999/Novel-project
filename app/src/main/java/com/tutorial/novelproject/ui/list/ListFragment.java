@@ -18,6 +18,7 @@ import android.widget.Spinner;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.model.NovelCard;
 import com.tutorial.novelproject.ui.listnovel.NovelViewList;
@@ -91,8 +92,8 @@ public class ListFragment extends Fragment implements Response.Listener<JSONObje
     @Override
     public void onResponse(JSONObject response) {
         try {
-            int currentPage = response.getInt("currentPage");
-            int maxPage = response.getInt("maxPage");
+            int currentPage = response.getInt("current");
+            int maxPage = response.getInt("lastPage");
             pagePicker.setMaxValue(maxPage);
             pagePicker.setMinValue(1);
             pagePicker.setValue(currentPage);
@@ -115,6 +116,11 @@ public class ListFragment extends Fragment implements Response.Listener<JSONObje
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Log.e("get response", error.getMessage());
+        String message = error.getMessage();
+        if (message == null) {
+            Log.e("get response", "no message");
+        } else {
+            Log.e("get response", message);
+        }
     }
 }

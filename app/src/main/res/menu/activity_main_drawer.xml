@@ -12,5 +12,9 @@
             android:id="@+id/nav_list"
             android:icon="@drawable/ic_baseline_list_24"
             android:title="@string/menu_list_novel" />
+        <item
+            android:id="@+id/nav_download"
+            android:icon="@drawable/ic_baseline_arrow_downward_24"
+            android:title="Download" />
     </group>
 </menu>

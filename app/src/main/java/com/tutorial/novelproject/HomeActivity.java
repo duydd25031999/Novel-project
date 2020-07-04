@@ -8,6 +8,7 @@ import android.view.Menu;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.tutorial.novelproject.ui.download.DownloadFragment;
 import com.tutorial.novelproject.ui.list.ListFragment;
 import com.tutorial.novelproject.ui.listnovel.ListNovelFragment;
 
@@ -69,6 +70,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                     new ListFragment()).commit();
                 toolbar.setTitle("Danh sách");
+                break;
+            case R.id.nav_download:
+                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                    new DownloadFragment()).commit();
+                toolbar.setTitle("Download");
                 break;
         }
 

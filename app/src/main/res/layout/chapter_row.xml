@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
+
+<LinearLayout
     android:id="@+id/chapter_row"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
-    android:textSize="@dimen/normal_text_size">
-</TextView>
+    android:padding="5dp">
+    <TextView
+        android:id="@+id/chapter_title"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:textSize="@dimen/normal_text_size"/>
+    <ImageView
+        android:id="@+id/chapter_download"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:src="@drawable/ic_baseline_arrow_downward_24"
+        android:layout_gravity="center"/>
+</LinearLayout>
+
