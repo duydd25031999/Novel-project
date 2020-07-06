@@ -1,4 +1,4 @@
-package com.tutorial.novelproject;
+package com.tutorial.novelproject.ui.read;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,18 +11,14 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.tutorial.novelproject.ui.novel.DetailNovelActivity;
+import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.database.ChapterDatabase;
 import com.tutorial.novelproject.model.ChapterDetail;
-import com.tutorial.novelproject.ui.read.ParagraphViewList;
 import com.tutorial.novelproject.utils.ApiCaller;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ReadChapterActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
     public final static String CHAPTER_URL = "chapter_url";

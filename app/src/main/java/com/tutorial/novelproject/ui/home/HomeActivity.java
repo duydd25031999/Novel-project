@@ -1,24 +1,17 @@
-package com.tutorial.novelproject;
+package com.tutorial.novelproject.ui.home;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Menu;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.ui.download.DownloadFragment;
 import com.tutorial.novelproject.ui.list.ListFragment;
-import com.tutorial.novelproject.ui.listnovel.ListNovelFragment;
+import com.tutorial.novelproject.ui.home.ListNovelFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;

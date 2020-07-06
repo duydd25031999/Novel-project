@@ -1,4 +1,4 @@
-package com.tutorial.novelproject.ui.listnovel;
+package com.tutorial.novelproject.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.tutorial.novelproject.DetailNovelActivity;
+import com.tutorial.novelproject.ui.novel.DetailNovelActivity;
 import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.model.Novel;
 

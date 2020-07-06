@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,10 +20,9 @@ import android.widget.Spinner;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.model.NovelCard;
-import com.tutorial.novelproject.ui.listnovel.NovelViewList;
+import com.tutorial.novelproject.ui.home.NovelViewList;
 import com.tutorial.novelproject.utils.ApiCaller;
 
 import org.json.JSONArray;
@@ -29,22 +30,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ListFragment extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener {
+public class ListFragment extends Fragment {
+    private ListNovelViewModel viewModel;
     private NovelViewList novelViewList;
     private NumberPicker pagePicker;
     private Integer maxPage;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        GridLayout novelGridView = view.findViewById(R.id.grid_novel_list);
-        novelViewList = new NovelViewList(novelGridView, getContext());
-        pagePicker = view.findViewById(R.id.page_picker);
-        maxPage = 0;
-
-        ApiCaller apiCaller = new ApiCaller();
-        apiCaller.getAllNovelCard(this, this, getContext());
         super.onViewCreated(view, savedInstanceState);
+        initViewModel(view);
+        viewModel.firstNovelCardPage();
     }
 
     @Override
@@ -58,69 +56,63 @@ public class ListFragment extends Fragment implements Response.Listener<JSONObje
         optionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(optionAdapter);
 
-        NumberPicker pagePicker = rootView.findViewById(R.id.page_picker);
-        ImageView firstPage = rootView.findViewById(R.id.first_page);
-        ImageView lastPage = rootView.findViewById(R.id.last_page);
-
-        final ListFragment that = this;
-        pagePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                ApiCaller apiCaller = new ApiCaller();
-                apiCaller.getAllNovelCardWithPage(newVal, that, that, getContext());
-
-            }
-        });
-        firstPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ApiCaller apiCaller = new ApiCaller();
-                apiCaller.getAllNovelCardWithPage(1, that, that, getContext());
-            }
-        });
-        lastPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ApiCaller apiCaller = new ApiCaller();
-                apiCaller.getAllNovelCardWithPage(maxPage, that, that, getContext());
-            }
-        });
-
         return rootView;
     }
 
-    @Override
-    public void onResponse(JSONObject response) {
-        try {
-            int currentPage = response.getInt("current");
-            int maxPage = response.getInt("lastPage");
-            pagePicker.setMaxValue(maxPage);
-            pagePicker.setMinValue(1);
-            pagePicker.setValue(currentPage);
-            this.maxPage = maxPage;
+    private void initViewModel(View rootView) {
+        viewModel = new ViewModelProvider(requireActivity()).get(ListNovelViewModel.class);
+        pagePicker = rootView.findViewById(R.id.page_picker);
+        ImageView firstPage = rootView.findViewById(R.id.first_page);
+        ImageView lastPage = rootView.findViewById(R.id.last_page);
 
-            ArrayList<NovelCard> novelCardArrayList = new ArrayList<NovelCard>();
-            JSONArray booksJson = response.getJSONArray("books");
-            for (int i = 0; i < booksJson.length(); i++) {
-                NovelCard novelCard = NovelCard.createFromJson(booksJson.getJSONObject(i));
-                novelCardArrayList.add(novelCard);
+        pagePicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                viewModel.changeNovelCardPage(newVal);
             }
-            novelViewList.listView(novelCardArrayList);
+        });
+        pagePicker.setMinValue(1);
 
-        } catch (JSONException e) {
-            Log.e("json parser", e.getMessage());
-        }
+        firstPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.changeNovelCardPage(1);
+            }
+        });
 
+        lastPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.changeNovelCardPage(maxPage);
+            }
+        });
 
-    }
+        GridLayout novelGridView = rootView.findViewById(R.id.grid_novel_list);
+        novelViewList = new NovelViewList(novelGridView, getContext());
 
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        String message = error.getMessage();
-        if (message == null) {
-            Log.e("get response", "no message");
-        } else {
-            Log.e("get response", message);
-        }
+        ListFragment that = this;
+
+        viewModel.getAllNovelCards().observe(getViewLifecycleOwner(), new Observer<List<NovelCard>>() {
+            @Override
+            public void onChanged(List<NovelCard> novelCards) {
+                novelViewList.listView(novelCards);
+            }
+        });
+
+        viewModel.getLiveCurrentPage().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer currentPage) {
+                pagePicker.setValue(currentPage);
+
+            }
+        });
+
+        viewModel.getLiveMaxPage().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer maxPage) {
+                pagePicker.setMaxValue(maxPage);
+                that.maxPage = maxPage;
+            }
+        });
     }
 }

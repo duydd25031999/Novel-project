@@ -1,4 +1,4 @@
-package com.tutorial.novelproject;
+package com.tutorial.novelproject.ui.novel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,18 +14,16 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.model.NovelDetail;
-import com.tutorial.novelproject.model.Volumne;
-import com.tutorial.novelproject.ui.detail.ChapterListAdapter;
+import com.tutorial.novelproject.model.Volume;
+import com.tutorial.novelproject.ui.novel.ChapterListAdapter;
 import com.tutorial.novelproject.utils.ApiCaller;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class DetailNovelActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
     public final static String NOVEL_URL = "novel_url";
@@ -76,7 +74,7 @@ public class DetailNovelActivity extends AppCompatActivity implements Response.L
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
-    private void setChapterList(ArrayList<Volumne> volumnes) {
+    private void setChapterList(ArrayList<Volume> volumnes) {
         ExpandableListView expandableListView = findViewById(R.id.vol_list);
         ChapterListAdapter chapterListAdapter = new ChapterListAdapter(this, volumnes, novelUrl);
         expandableListView.setAdapter(chapterListAdapter);
@@ -100,7 +98,7 @@ public class DetailNovelActivity extends AppCompatActivity implements Response.L
 
             setToobar(novelDetail.getTitle());
             setDetailNovel(novelDetail);
-            setChapterList(novelDetail.getVolumnes());
+            setChapterList(novelDetail.getVolumes());
         } catch (JSONException e) {
             Log.e("json parser", e.getMessage());
             onBackPressed();

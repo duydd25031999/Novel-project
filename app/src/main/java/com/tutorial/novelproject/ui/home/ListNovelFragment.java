@@ -1,4 +1,4 @@
-package com.tutorial.novelproject.ui.listnovel;
+package com.tutorial.novelproject.ui.home;
 
 import android.os.Bundle;
 
@@ -8,10 +8,6 @@ import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.model.Novel;

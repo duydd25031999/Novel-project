@@ -14,12 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tutorial.novelproject.R;
-import com.tutorial.novelproject.ReadChapterActivity;
+import com.tutorial.novelproject.ui.read.ReadChapterActivity;
 import com.tutorial.novelproject.database.ChapterDatabase;
 import com.tutorial.novelproject.model.ChapterDetail;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 public class DownloadFragment extends Fragment {
 
