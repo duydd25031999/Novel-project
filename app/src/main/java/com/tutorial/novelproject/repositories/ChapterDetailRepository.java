@@ -11,14 +11,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.tutorial.novelproject.database.ChapterDAO;
 import com.tutorial.novelproject.database.ChapterDatabase;
-import com.tutorial.novelproject.model.Chapter;
 import com.tutorial.novelproject.model.ChapterWithContent;
 import com.tutorial.novelproject.utils.ApiCaller;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 public class ChapterDetailRepository implements Response.Listener<JSONObject>, Response.ErrorListener {
     private ChapterDAO chapterDAO;

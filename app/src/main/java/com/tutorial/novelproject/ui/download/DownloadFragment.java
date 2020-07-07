@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tutorial.novelproject.R;
+import com.tutorial.novelproject.model.Chapter;
 import com.tutorial.novelproject.ui.read.ReadChapterActivity;
-import com.tutorial.novelproject.database.ChapterDatabase2;
-import com.tutorial.novelproject.model.ChapterDetail;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class DownloadFragment extends Fragment {
+    private DownloadedChapterViewModel viewModel;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -28,24 +29,27 @@ public class DownloadFragment extends Fragment {
 
         LinearLayout linearLayout = view.findViewById(R.id.download_list);
 
-        ChapterDatabase2 chapterDatabase2 = new ChapterDatabase2(getContext(), null);
-        ArrayList<ChapterDetail> chapterDetails = chapterDatabase2.getAllDowloaded();
-
+        viewModel = new ViewModelProvider(requireActivity()).get(DownloadedChapterViewModel.class);
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-        for (ChapterDetail chapterDetail : chapterDetails) {
-            View newRow = createRow(chapterDetail, layoutInflater, linearLayout);
-            linearLayout.addView(newRow);
-        }
+        viewModel.getLiveListDownloadedChapters().observe(getViewLifecycleOwner(), new Observer<List<Chapter>>() {
+            @Override
+            public void onChanged(List<Chapter> chapters) {
+                for (Chapter chapter : chapters) {
+                    View newRow = createRow(chapter, layoutInflater, linearLayout);
+                    linearLayout.addView(newRow);
+                }
+            }
+        });
     }
 
-    public View createRow(ChapterDetail chapterDetail, LayoutInflater layoutInflater, LinearLayout linearLayout) {
+    public View createRow(Chapter chapter, LayoutInflater layoutInflater, LinearLayout linearLayout) {
         View view  = layoutInflater.inflate(R.layout.download_row, linearLayout, false);
-        ((TextView) view).setText(chapterDetail.getUrl());
+        ((TextView) view).setText(chapter.getUrl());
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), ReadChapterActivity.class);
-                intent.putExtra(ReadChapterActivity.CHAPTER_URL, chapterDetail.getUrl());
+                intent.putExtra(ReadChapterActivity.CHAPTER_URL, chapter.getUrl());
                 getContext().startActivity(intent);
             }
         });

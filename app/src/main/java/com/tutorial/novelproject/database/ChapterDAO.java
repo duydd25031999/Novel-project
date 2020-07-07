@@ -1,5 +1,6 @@
 package com.tutorial.novelproject.database;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -31,7 +32,7 @@ public abstract class ChapterDAO {
     }
 
     @Query("SELECT * FROM chapter")
-    public abstract List<Chapter> getAllDownloadedChapters();
+    public abstract LiveData<List<Chapter>> getAllDownloadedChapters();
 
     @Query("SELECT * FROM chapter WHERE url LIKE :urlParam")
     public abstract ChapterWithContent getChapterFromUrl(String urlParam);
