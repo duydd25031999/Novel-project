@@ -1,35 +1,30 @@
-package com.tutorial.novelproject.ui.detail;
+package com.tutorial.novelproject.ui.novel;
 
-import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tutorial.novelproject.R;
-import com.tutorial.novelproject.ReadChapterActivity;
+import com.tutorial.novelproject.ui.read.ReadChapterActivity;
 import com.tutorial.novelproject.model.ChapterRow;
-import com.tutorial.novelproject.model.Volumne;
-import com.tutorial.novelproject.utils.DownloadChapter;
+import com.tutorial.novelproject.model.Volume;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class ChapterListAdapter extends BaseExpandableListAdapter {
-    private Context context;
-    private ArrayList<Volumne> volumes;
+    private DetailNovelActivity activity;
+    private ArrayList<Volume> volumes;
     private String novelUrl;
 
     public ChapterListAdapter() {
     }
 
-    public ChapterListAdapter(Context context, ArrayList<Volumne> volumes, String novelUrl) {
-        this.context = context;
+    public ChapterListAdapter(DetailNovelActivity activity, ArrayList<Volume> volumes, String novelUrl) {
+        this.activity = activity;
         this.volumes = volumes;
         this.novelUrl = novelUrl;
     }
@@ -41,8 +36,8 @@ public class ChapterListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        Volumne volumne = volumes.get(groupPosition);
-        ArrayList chapters = volumne.getChapters();
+        Volume volume = volumes.get(groupPosition);
+        ArrayList chapters = volume.getChapters();
         return chapters.size();
     }
 
@@ -53,8 +48,8 @@ public class ChapterListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        Volumne volumne = volumes.get(groupPosition);
-        ArrayList chapters = volumne.getChapters();
+        Volume volume = volumes.get(groupPosition);
+        ArrayList chapters = volume.getChapters();
         return chapters.get(childPosition);
     }
 
@@ -75,9 +70,9 @@ public class ChapterListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        Volumne volume = volumes.get(groupPosition);
+        Volume volume = volumes.get(groupPosition);
         if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(context);
+            LayoutInflater inflater = LayoutInflater.from(activity);
             convertView = inflater.inflate(R.layout.chapter_list, parent, false);
         }
 
@@ -88,10 +83,10 @@ public class ChapterListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        Volumne volumne = volumes.get(groupPosition);
-        ChapterRow chapter = volumne.getChapters().get(childPosition);
+        Volume volume = volumes.get(groupPosition);
+        ChapterRow chapter = volume.getChapters().get(childPosition);
         if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(context);
+            LayoutInflater inflater = LayoutInflater.from(activity);
             convertView = inflater.inflate(R.layout.chapter_row, parent, false);
         }
 
@@ -100,12 +95,12 @@ public class ChapterListAdapter extends BaseExpandableListAdapter {
         txtTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ReadChapterActivity.class);
+                Intent intent = new Intent(activity, ReadChapterActivity.class);
                 intent.putExtra(ReadChapterActivity.CHAPTER_URL, chapter.getUrl());
                 intent.putExtra(ReadChapterActivity.CHAPTER_TITLE, chapter.getTitle());
-                intent.putExtra(ReadChapterActivity.VOLUME_TITLE, volumne.getTitle());
+                intent.putExtra(ReadChapterActivity.VOLUME_TITLE, volume.getTitle());
                 intent.putExtra(ReadChapterActivity.NOVEL_URL, novelUrl);
-                context.startActivity(intent);
+                activity.startActivity(intent);
             }
         });
 
@@ -113,8 +108,8 @@ public class ChapterListAdapter extends BaseExpandableListAdapter {
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DownloadChapter downloadChapter = new DownloadChapter(context);
-                downloadChapter.execute(chapter.getUrl());
+                DetailNovelViewModel viewModel = activity.getViewModel();
+                viewModel.downloadChapter(chapter.getUrl());
             }
         });
 
