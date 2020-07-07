@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.tutorial.novelproject.database.ChapterDatabase;
+import com.tutorial.novelproject.database.ChapterDatabase2;
 import com.tutorial.novelproject.model.ChapterDetail;
 
 import org.json.JSONException;
@@ -38,8 +38,8 @@ public class DownloadChapter extends AsyncTask<String, Void, Void>
     public void onResponse(JSONObject response) {
         try {
             ChapterDetail chapterDetail = ChapterDetail.createFromJson(response, url);
-            ChapterDatabase chapterDatabase = new ChapterDatabase(context, null);
-            chapterDatabase.insertChapter(chapterDetail);
+            ChapterDatabase2 chapterDatabase2 = new ChapterDatabase2(context, null);
+            chapterDatabase2.insertChapter(chapterDetail);
             Toast.makeText(context, "Download successful", Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
             Log.e("json parser", e.getMessage());

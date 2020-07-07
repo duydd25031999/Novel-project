@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.ui.read.ReadChapterActivity;
-import com.tutorial.novelproject.database.ChapterDatabase;
+import com.tutorial.novelproject.database.ChapterDatabase2;
 import com.tutorial.novelproject.model.ChapterDetail;
 
 import java.util.ArrayList;
@@ -28,8 +28,8 @@ public class DownloadFragment extends Fragment {
 
         LinearLayout linearLayout = view.findViewById(R.id.download_list);
 
-        ChapterDatabase chapterDatabase = new ChapterDatabase(getContext(), null);
-        ArrayList<ChapterDetail> chapterDetails = chapterDatabase.getAllDowloaded();
+        ChapterDatabase2 chapterDatabase2 = new ChapterDatabase2(getContext(), null);
+        ArrayList<ChapterDetail> chapterDetails = chapterDatabase2.getAllDowloaded();
 
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         for (ChapterDetail chapterDetail : chapterDetails) {

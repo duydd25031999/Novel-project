@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tutorial.novelproject.R;
+import com.tutorial.novelproject.model.ChapterContent;
 
 import java.util.List;
 
@@ -27,10 +28,18 @@ public class ParagraphViewList {
         return view;
     }
 
-    public void listView(List<String> listParagraph) {
+//    public void listView(List<String> listParagraph) {
+//        layout.removeAllViews();
+//        for (String paragragh : listParagraph) {
+//            TextView view = createView(paragragh);
+//            layout.addView(view);
+//        }
+//    }
+
+    public void listView(List<ChapterContent> contents) {
         layout.removeAllViews();
-        for (String paragragh : listParagraph) {
-            TextView view = createView(paragragh);
+        for (ChapterContent content : contents) {
+            TextView view = createView(content.getContent());
             layout.addView(view);
         }
     }

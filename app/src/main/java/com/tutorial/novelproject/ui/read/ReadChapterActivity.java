@@ -1,6 +1,8 @@
 package com.tutorial.novelproject.ui.read;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,14 +13,20 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.tutorial.novelproject.model.Chapter;
+import com.tutorial.novelproject.model.ChapterContent;
+import com.tutorial.novelproject.model.ChapterWithContent;
 import com.tutorial.novelproject.ui.novel.DetailNovelActivity;
 import com.tutorial.novelproject.R;
-import com.tutorial.novelproject.database.ChapterDatabase;
+import com.tutorial.novelproject.database.ChapterDatabase2;
 import com.tutorial.novelproject.model.ChapterDetail;
+import com.tutorial.novelproject.ui.novel.DetailNovelViewModel;
 import com.tutorial.novelproject.utils.ApiCaller;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class ReadChapterActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
     public final static String CHAPTER_URL = "chapter_url";
@@ -27,6 +35,7 @@ public class ReadChapterActivity extends AppCompatActivity implements Response.L
     public final static String NOVEL_URL = "novel_url";
 
     private ParagraphViewList paragraphViewList;
+    private ReadChapterViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +56,24 @@ public class ReadChapterActivity extends AppCompatActivity implements Response.L
         String novelUrl = intent.getStringExtra(NOVEL_URL);
 
         setConstText(chapterTitle, volumeTitle, novelUrl);
-        executeChapterUrl(chapterUrl);
+//        executeChapterUrl(chapterUrl);
+        initViewModel(chapterUrl);
+
+    }
+
+    private void initViewModel(String chapterUrl) {
+        viewModel = new ViewModelProvider(this).get(ReadChapterViewModel.class);
+        viewModel.getLiveChapterWithContent().observe(this, new Observer<ChapterWithContent>() {
+            @Override
+            public void onChanged(ChapterWithContent chapterWithContent) {
+                Chapter chapter = chapterWithContent.chapter;
+                List<ChapterContent> contents = chapterWithContent.contents;
+                setMoveChapEvent(R.id.previous_chapter, chapter.getPrevUrl());
+                setMoveChapEvent(R.id.next_chapter, chapter.getNextUrl());
+                paragraphViewList.listView(contents);
+            }
+        });
+        viewModel.getChapterFromUrl(chapterUrl);
     }
 
     private void setConstText(String chapterTitle, String volumeTitle, String novelUrl) {
@@ -91,7 +117,7 @@ public class ReadChapterActivity extends AppCompatActivity implements Response.L
     }
 
     private void executeChapterUrl(String url) {
-        ChapterDatabase database = new ChapterDatabase(this, null);
+        ChapterDatabase2 database = new ChapterDatabase2(this, null);
         ChapterDetail chapter = database.findByUrl(url);
         if (chapter == null) {
             ApiCaller apiCaller = new ApiCaller();
@@ -105,7 +131,7 @@ public class ReadChapterActivity extends AppCompatActivity implements Response.L
     private void setChapterDetail(ChapterDetail chapterDetail) {
         setMoveChapEvent(R.id.previous_chapter, chapterDetail.getPrevUrl());
         setMoveChapEvent(R.id.next_chapter, chapterDetail.getNextUrl());
-        paragraphViewList.listView(chapterDetail.getContent());
+//        paragraphViewList.listView(chapterDetail.getContent());
     }
 
     private void setMoveChapEvent(int btnId, String url) {
