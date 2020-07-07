@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +17,10 @@ import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.model.NovelCard;
 import com.tutorial.novelproject.ui.home.NovelViewList;
-import com.tutorial.novelproject.utils.ApiCaller;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListFragment extends Fragment {

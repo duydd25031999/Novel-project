@@ -2,32 +2,27 @@ package com.tutorial.novelproject.ui.novel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.model.NovelDetail;
 import com.tutorial.novelproject.model.Volume;
-import com.tutorial.novelproject.ui.novel.ChapterListAdapter;
-import com.tutorial.novelproject.utils.ApiCaller;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class DetailNovelActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
+public class DetailNovelActivity extends AppCompatActivity {
     public final static String NOVEL_URL = "novel_url";
-    public String novelUrl;
+    private String novelUrl;
+    private DetailNovelViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +32,16 @@ public class DetailNovelActivity extends AppCompatActivity implements Response.L
         Intent intent = getIntent();
         novelUrl = intent.getStringExtra(NOVEL_URL);
 
-        ApiCaller apiCaller = new ApiCaller();
-        apiCaller.getNovelDetail(novelUrl, this, this, this);
+        viewModel = new ViewModelProvider(this).get(DetailNovelViewModel.class);
+        viewModel.getLiveNovel().observe(this, new Observer<NovelDetail>() {
+            @Override
+            public void onChanged(NovelDetail novelDetail) {
+                setToobar(novelDetail.getTitle());
+                setDetailNovel(novelDetail);
+                setChapterList(novelDetail.getVolumes());
+            }
+        });
+        viewModel.getNovelDetailFromUrl(novelUrl);
     }
 
     private void setDetailNovel(NovelDetail novelDetail) {
@@ -78,30 +81,5 @@ public class DetailNovelActivity extends AppCompatActivity implements Response.L
         ExpandableListView expandableListView = findViewById(R.id.vol_list);
         ChapterListAdapter chapterListAdapter = new ChapterListAdapter(this, volumnes, novelUrl);
         expandableListView.setAdapter(chapterListAdapter);
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        String message = error.getMessage();
-        if (message == null) {
-            Log.e("get response", "no message");
-        } else {
-            Log.e("get response", message);
-        }
-        onBackPressed();
-    }
-
-    @Override
-    public void onResponse(JSONObject response) {
-        try {
-            NovelDetail novelDetail = NovelDetail.createFromJson(response);
-
-            setToobar(novelDetail.getTitle());
-            setDetailNovel(novelDetail);
-            setChapterList(novelDetail.getVolumes());
-        } catch (JSONException e) {
-            Log.e("json parser", e.getMessage());
-            onBackPressed();
-        }
     }
 }

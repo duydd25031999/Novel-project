@@ -65,7 +65,6 @@ public class NovelCardRepository implements Response.Listener<JSONObject>, Respo
 
     @Override
     public void onErrorResponse(VolleyError error) {
-
     }
 
     @Override
