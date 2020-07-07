@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 @Entity
 public class Chapter {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String url;
     private String volume;

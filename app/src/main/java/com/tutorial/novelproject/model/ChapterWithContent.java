@@ -14,7 +14,7 @@ public class ChapterWithContent {
     @Embedded
     public Chapter chapter;
 
-    @Relation(parentColumn = "id", entityColumn = "chapter_id")
+    @Relation(parentColumn = "id", entityColumn = "chapter_id", entity = ChapterContent.class)
     public List<ChapterContent> contents;
 
     public static ChapterWithContent createFromJSON(JSONObject json, String url) throws JSONException {

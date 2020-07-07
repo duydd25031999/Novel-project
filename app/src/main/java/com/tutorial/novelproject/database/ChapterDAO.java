@@ -22,13 +22,17 @@ public abstract class ChapterDAO {
 
     @Transaction
     public void insert(ChapterWithContent chapterWithContent) {
-        final long chapterId = insert(chapterWithContent.chapter);
+        long chapterId = insert(chapterWithContent.chapter);
 
         for (ChapterContent content : chapterWithContent.contents) {
             content.setChapterId(chapterId);
+            insert(content);
         }
     }
 
     @Query("SELECT * FROM chapter")
     public abstract List<Chapter> getAllDownloadedChapters();
+
+    @Query("SELECT * FROM chapter WHERE url LIKE :urlParam")
+    public abstract ChapterWithContent getChapterFromUrl(String urlParam);
 }

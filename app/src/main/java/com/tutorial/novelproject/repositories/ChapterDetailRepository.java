@@ -3,6 +3,7 @@ package com.tutorial.novelproject.repositories;
 import android.app.Application;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -51,10 +52,14 @@ public class ChapterDetailRepository implements Response.Listener<JSONObject>, R
     public void onResponse(JSONObject response) {
         try {
             ChapterWithContent chapterWithContent = ChapterWithContent.createFromJSON(response, currentChapterUrl);
-            liveChapterWithContent.postValue(chapterWithContent);
+            setChapterWithContent(chapterWithContent);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setChapterWithContent(ChapterWithContent chapterWithContent) {
+        liveChapterWithContent.postValue(chapterWithContent);
     }
 
     private static class GetChapterFromUrlTask extends AsyncTask<String, Void, Void> {
@@ -69,8 +74,10 @@ public class ChapterDetailRepository implements Response.Listener<JSONObject>, R
             String url = strings[0];
             this.repository.currentChapterUrl = url;
 
-            if (false) {
-                // TO DO : get chapter from database
+            ChapterWithContent chapterWithContent = repository.chapterDAO.getChapterFromUrl(url);
+
+            if (chapterWithContent != null) {
+                repository.setChapterWithContent(chapterWithContent);
             } else {
                 ApiCaller apiCaller = new ApiCaller();
                 apiCaller.getChapter(url, repository, repository, repository.context);

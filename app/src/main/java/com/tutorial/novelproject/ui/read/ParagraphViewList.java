@@ -28,14 +28,6 @@ public class ParagraphViewList {
         return view;
     }
 
-//    public void listView(List<String> listParagraph) {
-//        layout.removeAllViews();
-//        for (String paragragh : listParagraph) {
-//            TextView view = createView(paragragh);
-//            layout.addView(view);
-//        }
-//    }
-
     public void listView(List<ChapterContent> contents) {
         layout.removeAllViews();
         for (ChapterContent content : contents) {

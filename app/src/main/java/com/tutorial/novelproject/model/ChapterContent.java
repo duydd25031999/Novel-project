@@ -18,7 +18,7 @@ import static androidx.room.ForeignKey.RESTRICT;
     indices = @Index("chapter_id")
 )
 public class ChapterContent {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "chapter_id")
     private int chapterId;

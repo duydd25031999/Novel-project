@@ -22,6 +22,9 @@ public class DetailNovelViewModel extends AndroidViewModel {
     public void getNovelDetailFromUrl(String url) {
         repository.getNovelDetailFromUrl(url);
     }
+    public void downloadChapter(String url) {
+        repository.downloadChapter(url);
+    }
 
     public LiveData<NovelDetail> getLiveNovel() {
         return liveNovel;

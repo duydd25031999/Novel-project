@@ -24,6 +24,10 @@ public class DetailNovelActivity extends AppCompatActivity {
     private String novelUrl;
     private DetailNovelViewModel viewModel;
 
+    public DetailNovelViewModel getViewModel() {
+        return viewModel;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
