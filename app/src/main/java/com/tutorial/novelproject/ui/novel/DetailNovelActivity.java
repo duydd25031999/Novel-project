@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.borjabravo.readmoretextview.ReadMoreTextView;
 import com.bumptech.glide.Glide;
 import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.model.NovelDetail;
@@ -49,7 +51,7 @@ public class DetailNovelActivity extends AppCompatActivity {
     }
 
     private void setDetailNovel(NovelDetail novelDetail) {
-        TextView txtName = findViewById(R.id.detail_novel_name);
+        ReadMoreTextView txtName = findViewById(R.id.detail_novel_name);
         TextView txtAuthor = findViewById(R.id.author_name);
         TextView txtArtist = findViewById(R.id.artist_name);
         ImageView imageView = findViewById(R.id.detail_novel_image);
