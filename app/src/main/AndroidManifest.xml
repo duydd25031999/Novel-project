@@ -15,11 +15,10 @@
         <activity android:name=".ui.novel.DetailNovelActivity" />
         <activity
             android:name=".ui.home.HomeActivity"
-            android:label="@string/title_activity_home"
+            android:label="Trang chủ"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
