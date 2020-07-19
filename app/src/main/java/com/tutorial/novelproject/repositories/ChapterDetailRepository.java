@@ -37,7 +37,15 @@ public class ChapterDetailRepository implements Response.Listener<JSONObject>, R
         return liveChapterWithContent;
     }
 
-    public void getChapterFromUrl(String url) {
+    public void getChapterFromUrl(
+            String url,
+            String chapterTitle,
+            String volumeTitle,
+            String novelUrl
+    ) {
+        this.chapterTitle = chapterTitle;
+        this.volumeTitle = volumeTitle;
+        this.novelUrl = novelUrl;
         new GetChapterFromUrlTask(this).execute(url);
     }
 
@@ -48,7 +56,7 @@ public class ChapterDetailRepository implements Response.Listener<JSONObject>, R
     @Override
     public void onResponse(JSONObject response) {
         try {
-            ChapterWithContent chapterWithContent = ChapterWithContent.createFromJSON(response, currentChapterUrl);
+            ChapterWithContent chapterWithContent = ChapterWithContent.createFromJSON(response, currentChapterUrl, chapterTitle, volumeTitle, novelUrl);
             setChapterWithContent(chapterWithContent);
         } catch (JSONException e) {
             e.printStackTrace();

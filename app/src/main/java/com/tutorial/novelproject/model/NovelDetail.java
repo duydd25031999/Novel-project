@@ -13,19 +13,25 @@ public class NovelDetail {
     private String author;
     private String artist;
     private ArrayList<Volume> volumes;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
 
     public NovelDetail() {
         genres = new ArrayList<String>();
         volumes = new ArrayList<Volume>();
     }
 
-    public NovelDetail(String title, String imageUrl, ArrayList<String> genres, String author, String artist, ArrayList<Volume> volumes) {
+    public NovelDetail(String title, String imageUrl, ArrayList<String> genres, String author, String artist, ArrayList<Volume> volumes, String description) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.genres = genres;
         this.author = author;
         this.artist = artist;
         this.volumes = volumes;
+        this.description = description;
     }
 
     public static NovelDetail createFromJson(JSONObject json) throws JSONException {
@@ -36,6 +42,7 @@ public class NovelDetail {
         novelDetail.author = json.getString("author");
         novelDetail.artist = json.getString("artist");
         novelDetail.getVolumesFromJson(json.getJSONArray("volumes"));
+        novelDetail.description = json.getString("description");
 
         return novelDetail;
     }

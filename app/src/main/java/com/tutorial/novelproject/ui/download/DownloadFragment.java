@@ -44,7 +44,7 @@ public class DownloadFragment extends Fragment {
 
     public View createRow(Chapter chapter, LayoutInflater layoutInflater, LinearLayout linearLayout) {
         View view  = layoutInflater.inflate(R.layout.download_row, linearLayout, false);
-        ((TextView) view).setText(chapter.getUrl());
+        ((TextView) view).setText(chapter.getVolume() + "\n" + chapter.getTitle() );
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

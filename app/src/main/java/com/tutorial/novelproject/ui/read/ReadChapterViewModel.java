@@ -23,7 +23,12 @@ public class ReadChapterViewModel extends AndroidViewModel {
         return liveChapterWithContent;
     }
 
-    public void getChapterFromUrl(String url) {
-        repository.getChapterFromUrl(url);
+    public void getChapterFromUrl(
+        String url,
+        String chapterTitle,
+        String volumeTitle,
+        String novelUrl
+    ) {
+        repository.getChapterFromUrl(url, chapterTitle, volumeTitle, novelUrl);
     }
 }
