@@ -46,23 +46,28 @@ public class ReadChapterActivity extends AppCompatActivity {
         String volumeTitle = intent.getStringExtra(VOLUME_TITLE);
         String novelUrl = intent.getStringExtra(NOVEL_URL);
 
-        setConstText(chapterTitle, volumeTitle, novelUrl);
-        initViewModel(chapterUrl);
+        initViewModel(chapterUrl, chapterTitle, volumeTitle, novelUrl);
     }
 
-    private void initViewModel(String chapterUrl) {
+    private void initViewModel(
+        String chapterUrl,
+        String chapterTitle,
+        String volumeTitle,
+        String novelUrl
+    ) {
         viewModel = new ViewModelProvider(this).get(ReadChapterViewModel.class);
         viewModel.getLiveChapterWithContent().observe(this, new Observer<ChapterWithContent>() {
             @Override
             public void onChanged(ChapterWithContent chapterWithContent) {
                 Chapter chapter = chapterWithContent.chapter;
                 List<ChapterContent> contents = chapterWithContent.contents;
-                setMoveChapEvent(R.id.previous_chapter, chapter.getPrevUrl());
-                setMoveChapEvent(R.id.next_chapter, chapter.getNextUrl());
+                setMoveChapEvent(R.id.previous_chapter, chapter.getPrevUrl(), chapterTitle, volumeTitle, chapter.getNovelUrl());
+                setMoveChapEvent(R.id.next_chapter, chapter.getNextUrl(), chapterTitle, volumeTitle, chapter.getNovelUrl());
+                setConstText(chapter.getTitle(), chapter.getVolume(), chapter.getNovelUrl());
                 paragraphViewList.listView(contents);
             }
         });
-        viewModel.getChapterFromUrl(chapterUrl);
+        viewModel.getChapterFromUrl(chapterUrl, chapterTitle, volumeTitle, novelUrl);
     }
 
     private void setConstText(String chapterTitle, String volumeTitle, String novelUrl) {
@@ -84,13 +89,19 @@ public class ReadChapterActivity extends AppCompatActivity {
     }
 
 
-    private void setMoveChapEvent(int btnId, String url) {
+    private void setMoveChapEvent(
+        int btnId,
+        String url,
+        String chapterTitle,
+        String volumeTitle,
+        String novelUrl
+    ) {
         LinearLayout btn = findViewById(btnId);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("setMoveChapEvent", url);
-                viewModel.getChapterFromUrl(url);
+                viewModel.getChapterFromUrl(url, chapterTitle, volumeTitle, novelUrl);
             }
         });
     }

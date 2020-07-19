@@ -17,13 +17,27 @@ public class ChapterWithContent {
     @Relation(parentColumn = "id", entityColumn = "chapter_id", entity = ChapterContent.class)
     public List<ChapterContent> contents;
 
-    public static ChapterWithContent createFromJSON(JSONObject json, String url) throws JSONException {
+    public static ChapterWithContent createFromJSON(
+        JSONObject json,
+        String chapterUrl,
+        String chapterTitle,
+        String volumeTitle,
+        String novelUrl
+    )
+            throws JSONException {
         String prevUrl = json.getString("prev");
         String nextUrl = json.getString("next");
 
         ChapterWithContent chapterWithContent = new ChapterWithContent();
 
-        chapterWithContent.chapter = new Chapter(url, "", "", prevUrl, nextUrl);
+        chapterWithContent.chapter = new Chapter(
+            chapterUrl,
+            volumeTitle,
+            chapterTitle,
+            prevUrl,
+            nextUrl,
+            novelUrl
+        );
 
         ArrayList<ChapterContent> listContent = new ArrayList<ChapterContent>();
         JSONArray jsonArray = json.getJSONArray("content");

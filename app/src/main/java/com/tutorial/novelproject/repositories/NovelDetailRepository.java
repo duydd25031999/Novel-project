@@ -41,8 +41,8 @@ public class NovelDetailRepository implements Response.Listener<JSONObject>, Res
         new NovelDetailApiTask(this).execute(url);
     }
 
-    public void downloadChapter(String url) {
-        new DownloadChapterTask(this).execute(url);
+    public void downloadChapter(String chapterUrl, String chapterTitle, String volumeTitle, String novelUrl) {
+        new DownloadChapterTask(this).execute(chapterUrl, chapterTitle, volumeTitle, novelUrl);
     }
 
     @Override
@@ -68,9 +68,9 @@ public class NovelDetailRepository implements Response.Listener<JSONObject>, Res
 
         @Override
         protected Void doInBackground(String... strings) {
-            String url = strings[0];
+            String chapterUrl = strings[0];
             ApiCaller apiCaller = new ApiCaller();
-            apiCaller.getNovelDetail(url, repository, repository, repository.context);
+            apiCaller.getNovelDetail(chapterUrl, repository, repository, repository.context);
             return null;
         }
     }
@@ -79,7 +79,7 @@ public class NovelDetailRepository implements Response.Listener<JSONObject>, Res
         implements Response.Listener<JSONObject>, Response.ErrorListener
     {
         private NovelDetailRepository repository;
-        private String chapterUrl;
+        private String chapterUrl, chapterTitle, volumeTitle, novelUrl;;
 
         public DownloadChapterTask(NovelDetailRepository repository) {
             this.repository = repository;
@@ -87,10 +87,12 @@ public class NovelDetailRepository implements Response.Listener<JSONObject>, Res
 
         @Override
         protected Void doInBackground(String... strings) {
-            String url = strings[0];
-            chapterUrl = url;
+            this.chapterUrl = strings[0];
+            this.chapterTitle = strings[1];
+            this.volumeTitle = strings[2];
+            this.novelUrl = strings[3];
             ApiCaller apiCaller = new ApiCaller();
-            apiCaller.getChapter(url, this, this, repository.context);
+            apiCaller.getChapter(chapterUrl, this, this, repository.context);
             return null;
         }
 
@@ -102,7 +104,7 @@ public class NovelDetailRepository implements Response.Listener<JSONObject>, Res
         @Override
         public void onResponse(JSONObject response) {
             try {
-                ChapterWithContent chapterWithContent = ChapterWithContent.createFromJSON(response, chapterUrl);
+                ChapterWithContent chapterWithContent = ChapterWithContent.createFromJSON(response, chapterUrl, chapterTitle, volumeTitle, novelUrl);
                 repository.chapterDAO.insert(chapterWithContent);
                 Toast.makeText(repository.context,"Download successful", Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {

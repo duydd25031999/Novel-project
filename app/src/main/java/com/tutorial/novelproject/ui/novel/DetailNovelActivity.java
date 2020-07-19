@@ -5,21 +5,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.borjabravo.readmoretextview.ReadMoreTextView;
 import com.bumptech.glide.Glide;
 import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.model.NovelDetail;
-import com.tutorial.novelproject.model.Volume;
-
-import java.util.ArrayList;
 
 public class DetailNovelActivity extends AppCompatActivity {
     public final static String NOVEL_URL = "novel_url";
@@ -37,6 +32,8 @@ public class DetailNovelActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         novelUrl = intent.getStringExtra(NOVEL_URL);
+        LinearLayout volumesLayout = findViewById(R.id.vol_list);
+        VolumesViewList volumesViewList = new VolumesViewList(volumesLayout, this);
 
         viewModel = new ViewModelProvider(this).get(DetailNovelViewModel.class);
         viewModel.getLiveNovel().observe(this, new Observer<NovelDetail>() {
@@ -44,21 +41,23 @@ public class DetailNovelActivity extends AppCompatActivity {
             public void onChanged(NovelDetail novelDetail) {
                 setToobar(novelDetail.getTitle());
                 setDetailNovel(novelDetail);
-                setChapterList(novelDetail.getVolumes());
+                volumesViewList.listVolumes(novelDetail, novelUrl);
             }
         });
         viewModel.getNovelDetailFromUrl(novelUrl);
     }
 
     private void setDetailNovel(NovelDetail novelDetail) {
-        ReadMoreTextView txtName = findViewById(R.id.detail_novel_name);
+        TextView txtName = findViewById(R.id.detail_novel_name);
         TextView txtAuthor = findViewById(R.id.author_name);
         TextView txtArtist = findViewById(R.id.artist_name);
         ImageView imageView = findViewById(R.id.detail_novel_image);
+        TextView txtDescription = findViewById(R.id.detail_novel_description);
 
         txtName.setText(novelDetail.getTitle());
         txtAuthor.setText(novelDetail.getAuthor());
         txtArtist.setText(novelDetail.getArtist());
+        txtDescription.setText(novelDetail.getDescription());
         Glide
             .with(findViewById(R.id.detail_novel_layout))
             .load(novelDetail.getImageUrl())
@@ -81,11 +80,5 @@ public class DetailNovelActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-    }
-
-    private void setChapterList(ArrayList<Volume> volumnes) {
-        ExpandableListView expandableListView = findViewById(R.id.vol_list);
-        ChapterListAdapter chapterListAdapter = new ChapterListAdapter(this, volumnes, novelUrl);
-        expandableListView.setAdapter(chapterListAdapter);
     }
 }

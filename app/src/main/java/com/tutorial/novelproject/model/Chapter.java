@@ -14,13 +14,15 @@ public class Chapter {
     private String title;
     private String prevUrl;
     private String nextUrl;
+    private String novelUrl;
 
-    public Chapter(String url, String volume, String title, String prevUrl, String nextUrl) {
+    public Chapter(String url, String volume, String title, String prevUrl, String nextUrl, String novelUrl) {
         this.url = url;
         this.volume = volume;
         this.title = title;
         this.prevUrl = prevUrl;
         this.nextUrl = nextUrl;
+        this.novelUrl = novelUrl;
     }
 
     public void setId(int id) {
@@ -49,5 +51,9 @@ public class Chapter {
 
     public String getNextUrl() {
         return nextUrl;
+    }
+
+    public String getNovelUrl() {
+        return novelUrl;
     }
 }
