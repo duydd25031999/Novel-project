@@ -13,8 +13,12 @@
             android:icon="@drawable/ic_baseline_list_24"
             android:title="@string/menu_list_novel" />
         <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/ic_baseline_search_24"
+            android:title="Tìm kiếm" />
+        <item
             android:id="@+id/nav_download"
             android:icon="@drawable/ic_baseline_arrow_downward_24"
-            android:title="Download" />
+            android:title="Tải xuống" />
     </group>
 </menu>
