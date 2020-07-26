@@ -8,6 +8,7 @@ import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.ui.download.DownloadFragment;
 import com.tutorial.novelproject.ui.list.ListFragment;
 import com.tutorial.novelproject.ui.home.ListNovelFragment;
+import com.tutorial.novelproject.ui.search.SearchFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -63,10 +64,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     new ListFragment()).commit();
                 toolbar.setTitle("Danh sách");
                 break;
+            case R.id.nav_search:
+                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                    new SearchFragment()).commit();
+                toolbar.setTitle("Tìm kiếm");
+                break;
             case R.id.nav_download:
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                     new DownloadFragment()).commit();
-                toolbar.setTitle("Download");
+                toolbar.setTitle("Tải xuống");
                 break;
         }
 

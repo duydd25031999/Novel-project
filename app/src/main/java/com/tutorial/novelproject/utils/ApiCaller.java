@@ -9,7 +9,11 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class ApiCaller {
     private final String baseUrl = "http://18.162.110.201";
@@ -41,5 +45,21 @@ public class ApiCaller {
 
     public void getChapter(String url, Response.Listener successListener, Response.ErrorListener errorListener, Context context) {
         callRequest(Request.Method.GET, url, null, successListener, errorListener, context);
+    }
+
+    public void searchNovel(
+        String keyword,
+        List<String> genres,
+        Response.Listener successListener,
+        Response.ErrorListener errorListener,
+        Context context
+    )
+        throws JSONException {
+        JSONObject bodyJson = new JSONObject();
+        JSONArray genreArray = new JSONArray(genres);
+        bodyJson.put("keyword", keyword);
+        bodyJson.put("ignore", genreArray);
+
+        callRequest(Request.Method.POST, "/api/hakore/search", bodyJson, successListener, errorListener, context);
     }
 }
