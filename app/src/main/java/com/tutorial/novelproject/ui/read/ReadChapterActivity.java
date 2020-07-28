@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.tutorial.novelproject.model.Chapter;
@@ -55,6 +56,7 @@ public class ReadChapterActivity extends AppCompatActivity {
         String volumeTitle,
         String novelUrl
     ) {
+        ScrollView scrollView = findViewById(R.id.read_scroll_view);
         viewModel = new ViewModelProvider(this).get(ReadChapterViewModel.class);
         viewModel.getLiveChapterWithContent().observe(this, new Observer<ChapterWithContent>() {
             @Override
@@ -65,6 +67,7 @@ public class ReadChapterActivity extends AppCompatActivity {
                 setMoveChapEvent(R.id.next_chapter, chapter.getNextUrl(), chapterTitle, volumeTitle, chapter.getNovelUrl());
                 setConstText(chapter.getTitle(), chapter.getVolume(), chapter.getNovelUrl());
                 paragraphViewList.listView(contents);
+                scrollView.scrollTo(0, 0);
             }
         });
         viewModel.getChapterFromUrl(chapterUrl, chapterTitle, volumeTitle, novelUrl);

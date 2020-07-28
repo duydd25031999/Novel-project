@@ -61,7 +61,8 @@ public class SearchFragment extends Fragment {
             @Override
             public void onChanged(List<NovelCard> novelCards) {
                 novelViewList.listView(novelCards);
-                scrollView.scrollTo(0, novelGridView.getScrollY());
+                int y = 2000;
+                scrollView.scrollTo(0, y);
             }
         });
 

@@ -47,7 +47,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                 new ListNovelFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_list);
+            navigationView.setCheckedItem(R.id.nav_list_novel);
         }
     }
 
