@@ -11,15 +11,14 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ReadChapterActivity"></activity>
-        <activity android:name=".DetailNovelActivity" />
+        <activity android:name=".ui.read.ReadChapterActivity"></activity>
+        <activity android:name=".ui.novel.DetailNovelActivity" />
         <activity
-            android:name=".HomeActivity"
-            android:label="@string/title_activity_home"
+            android:name=".ui.home.HomeActivity"
+            android:label="Trang chủ"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

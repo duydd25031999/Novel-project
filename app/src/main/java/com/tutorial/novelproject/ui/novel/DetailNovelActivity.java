@@ -1,34 +1,29 @@
-package com.tutorial.novelproject;
+package com.tutorial.novelproject.ui.novel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.tutorial.novelproject.R;
 import com.tutorial.novelproject.model.NovelDetail;
-import com.tutorial.novelproject.model.Volumne;
-import com.tutorial.novelproject.ui.detail.ChapterListAdapter;
-import com.tutorial.novelproject.utils.ApiCaller;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-public class DetailNovelActivity extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
+public class DetailNovelActivity extends AppCompatActivity {
     public final static String NOVEL_URL = "novel_url";
+    private String novelUrl;
+    private DetailNovelViewModel viewModel;
+
+    public DetailNovelViewModel getViewModel() {
+        return viewModel;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +31,20 @@ public class DetailNovelActivity extends AppCompatActivity implements Response.L
         setContentView(R.layout.activity_detail_novel);
 
         Intent intent = getIntent();
-        String novelUrl = intent.getStringExtra(NOVEL_URL);
+        novelUrl = intent.getStringExtra(NOVEL_URL);
+        LinearLayout volumesLayout = findViewById(R.id.vol_list);
+        VolumesViewList volumesViewList = new VolumesViewList(volumesLayout, this);
 
-        ApiCaller apiCaller = new ApiCaller();
-        apiCaller.getNovelDetail(novelUrl, this, this, this);
+        viewModel = new ViewModelProvider(this).get(DetailNovelViewModel.class);
+        viewModel.getLiveNovel().observe(this, new Observer<NovelDetail>() {
+            @Override
+            public void onChanged(NovelDetail novelDetail) {
+                setToobar(novelDetail.getTitle());
+                setDetailNovel(novelDetail);
+                volumesViewList.listVolumes(novelDetail, novelUrl);
+            }
+        });
+        viewModel.getNovelDetailFromUrl(novelUrl);
     }
 
     private void setDetailNovel(NovelDetail novelDetail) {
@@ -47,10 +52,12 @@ public class DetailNovelActivity extends AppCompatActivity implements Response.L
         TextView txtAuthor = findViewById(R.id.author_name);
         TextView txtArtist = findViewById(R.id.artist_name);
         ImageView imageView = findViewById(R.id.detail_novel_image);
+        TextView txtDescription = findViewById(R.id.detail_novel_description);
 
         txtName.setText(novelDetail.getTitle());
         txtAuthor.setText(novelDetail.getAuthor());
         txtArtist.setText(novelDetail.getArtist());
+        txtDescription.setText(novelDetail.getDescription());
         Glide
             .with(findViewById(R.id.detail_novel_layout))
             .load(novelDetail.getImageUrl())
@@ -73,29 +80,5 @@ public class DetailNovelActivity extends AppCompatActivity implements Response.L
             }
         });
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-    }
-
-    private void setChapterList(ArrayList<Volumne> volumnes) {
-        ExpandableListView expandableListView = findViewById(R.id.vol_list);
-        ChapterListAdapter chapterListAdapter = new ChapterListAdapter(this, volumnes);
-        expandableListView.setAdapter(chapterListAdapter);
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        Log.e("get response", error.getMessage());
-    }
-
-    @Override
-    public void onResponse(JSONObject response) {
-        try {
-            NovelDetail novelDetail = NovelDetail.createFromJson(response);
-
-            setToobar(novelDetail.getTitle());
-            setDetailNovel(novelDetail);
-            setChapterList(novelDetail.getVolumnes());
-        } catch (JSONException e) {
-            Log.e("json parser", e.getMessage());
-        }
     }
 }

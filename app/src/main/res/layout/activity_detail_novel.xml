@@ -5,118 +5,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/detail_novel_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorAccent"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-            <TextView
-                android:id="@+id/detail_novel_toolbar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </androidx.appcompat.widget.Toolbar>
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <LinearLayout
-        android:id="@+id/detail_novel_layout"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp"
-        android:orientation="vertical">
-        <ImageView
-            android:id="@+id/detail_novel_image"
-            android:layout_marginVertical="20dp"
-            android:layout_width="153dp"
-            android:layout_height="221dp"
-            android:layout_gravity="center_horizontal"/>
-
-        <TextView
-            android:id="@+id/detail_novel_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            style="@style/TextAppearance.MaterialComponents.Headline4"
-            android:layout_marginVertical="20dp"/>
-
-        <LinearLayout
+    tools:context=".ui.home.HomeActivity">
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Author"/>
-                <TextView
-                    android:id="@+id/author_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Artist"/>
-                <TextView
-                    android:id="@+id/artist_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal" />
-            </LinearLayout>
-        </LinearLayout>
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:padding="10dp"-->
-<!--            android:layout_marginVertical="10dp"-->
-<!--            android:orientation="vertical"-->
-<!--            android:background="@drawable/customborder">-->
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Summary"/>-->
-<!--            <com.borjabravo.readmoretextview.ReadMoreTextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Được Quân đoàn của Quỷ vương cưu mang và nuôi nấng từ nhỏ, Dariel đã sống và cống hiến cho tổ chức ấy suốt hơn 30 năm cuộc đời với tư cách là một Hắc Kị sĩ, một trợ lý xuất sắc của những Thống lĩnh quân đoàn quỷ, những người được biết đến với cái tên Tứ Đại Thiên vương.-->
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-<!--Nhưng rồi một ngày, anh đột nhiên bị những Tân Tứ Thiên vương thông báo rằng mình đã bị miễn nhiệm và buộc phải rời khỏi Quân đoàn Quỷ vì không thể sử dụng phép thuật.-->
-
-<!--Thất thểu rời đi trong nỗi buồn và cảm giác tuyệt vọng, liệu cuộc đời Dariel rồi sẽ trôi về đâu....-->
-<!--"               app:trimExpandedText="Show less"-->
-<!--                app:trimCollapsedText="Show more"-->
-<!--                app:trimMode="trimModeLine"-->
-<!--                app:trimLength="4" />-->
-<!--        </LinearLayout>-->
-
-        <ExpandableListView
-            android:id="@+id/vol_list"
-            android:layout_marginTop="10dp"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/detail_novel_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorAccent"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+                <TextView
+                    android:id="@+id/detail_novel_toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+        <ScrollView
+            android:layout_marginTop="?attr/actionBarSize"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layoutDirection="rtl">
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/detail_novel_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/detail_novel_image"
+                    android:layout_marginVertical="20dp"
+                    android:layout_width="153dp"
+                    android:layout_height="221dp"
+                    android:layout_gravity="center_horizontal"/>
 
-        </ExpandableListView>
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/detail_novel_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    style="@style/TextAppearance.MaterialComponents.Headline4"
+                    android:layout_marginVertical="20dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="Author"/>
+                        <TextView
+                            android:id="@+id/author_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="Artist"/>
+                        <TextView
+                            android:id="@+id/artist_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/detail_novel_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="20dp" />
+
+                <LinearLayout
+                    android:id="@+id/vol_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"/>
+            </LinearLayout>
+        </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

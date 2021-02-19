@@ -12,20 +12,26 @@ public class NovelDetail {
     private ArrayList<String> genres;
     private String author;
     private String artist;
-    private ArrayList<Volumne> volumnes;
+    private ArrayList<Volume> volumes;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
 
     public NovelDetail() {
         genres = new ArrayList<String>();
-        volumnes = new ArrayList<Volumne>();
+        volumes = new ArrayList<Volume>();
     }
 
-    public NovelDetail(String title, String imageUrl, ArrayList<String> genres, String author, String artist, ArrayList<Volumne> volumnes) {
+    public NovelDetail(String title, String imageUrl, ArrayList<String> genres, String author, String artist, ArrayList<Volume> volumes, String description) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.genres = genres;
         this.author = author;
         this.artist = artist;
-        this.volumnes = volumnes;
+        this.volumes = volumes;
+        this.description = description;
     }
 
     public static NovelDetail createFromJson(JSONObject json) throws JSONException {
@@ -36,6 +42,7 @@ public class NovelDetail {
         novelDetail.author = json.getString("author");
         novelDetail.artist = json.getString("artist");
         novelDetail.getVolumesFromJson(json.getJSONArray("volumes"));
+        novelDetail.description = json.getString("description");
 
         return novelDetail;
     }
@@ -49,8 +56,8 @@ public class NovelDetail {
     private void getVolumesFromJson(JSONArray jsonArray) throws JSONException {
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
-            Volumne volumne = Volumne.createFromJson(jsonObject);
-            volumnes.add(volumne);
+            Volume volume = Volume.createFromJson(jsonObject);
+            volumes.add(volume);
         }
     }
 
@@ -94,11 +101,11 @@ public class NovelDetail {
         this.artist = artist;
     }
 
-    public ArrayList<Volumne> getVolumnes() {
-        return volumnes;
+    public ArrayList<Volume> getVolumes() {
+        return volumes;
     }
 
-    public void setVolumnes(ArrayList<Volumne> volumnes) {
-        this.volumnes = volumnes;
+    public void setVolumes(ArrayList<Volume> volumes) {
+        this.volumes = volumes;
     }
 }

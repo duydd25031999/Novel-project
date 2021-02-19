@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_list_novel"
-        android:name="com.tutorial.novelproject.ui.listnovel.ListNovelFragment"
+        android:name="com.tutorial.novelproject.ui.home.ListNovelFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_list_novel" />
 

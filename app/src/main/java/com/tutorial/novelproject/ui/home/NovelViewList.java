@@ -1,4 +1,4 @@
-package com.tutorial.novelproject.ui.listnovel;
+package com.tutorial.novelproject.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,12 +11,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.tutorial.novelproject.DetailNovelActivity;
+import com.tutorial.novelproject.ui.novel.DetailNovelActivity;
 import com.tutorial.novelproject.R;
-import com.tutorial.novelproject.ReadChapterActivity;
+import com.tutorial.novelproject.ui.read.ReadChapterActivity;
 import com.tutorial.novelproject.model.NovelCard;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class NovelViewList {
     private GridLayout layout;
@@ -36,7 +36,8 @@ public class NovelViewList {
     private View createView(final NovelCard novelCard) {
         View view  = layoutInflater.inflate(R.layout.novel_card_item, layout, false);
 
-        RelativeLayout relativeLayout = view.findViewById(R.id.novel_card_container);
+        LinearLayout novelCardLayout = view.findViewById(R.id.novel_card_layout);
+        LinearLayout lastChapLayout = view.findViewById(R.id.last_chapter_layout);
         ImageView imageView = view.findViewById(R.id.novel_card_image);
         TextView chapterView = view.findViewById(R.id.novel_card_last_chapter);
         TextView volView = view.findViewById(R.id.novel_card_last_vol);
@@ -53,16 +54,7 @@ public class NovelViewList {
         volView.setText(novelCard.getLastVol());
         titleView.setText(novelCard.getTitle());
 
-        relativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ReadChapterActivity.class);
-                intent.putExtra(ReadChapterActivity.CHAPTER_URL, novelCard.getLastChapterUrl());
-                context.startActivity(intent);
-            }
-        });
-
-        titleView.setOnClickListener(new View.OnClickListener() {
+        novelCardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailNovelActivity.class);
@@ -71,10 +63,22 @@ public class NovelViewList {
             }
         });
 
+        lastChapLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ReadChapterActivity.class);
+                intent.putExtra(ReadChapterActivity.CHAPTER_URL, novelCard.getLastChapterUrl());
+                intent.putExtra(ReadChapterActivity.CHAPTER_TITLE, novelCard.getLastChapterTitle());
+                intent.putExtra(ReadChapterActivity.VOLUME_TITLE, novelCard.getLastVol());
+                intent.putExtra(ReadChapterActivity.NOVEL_URL, novelCard.getUrl());
+                context.startActivity(intent);
+            }
+        });
+
         return view;
     }
 
-    public void listView(ArrayList<NovelCard> novelCards) {
+    public void listView(List<NovelCard> novelCards) {
         layout.removeAllViews();
         for (NovelCard card : novelCards) {
             View view = createView(card);

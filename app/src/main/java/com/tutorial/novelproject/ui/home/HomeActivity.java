@@ -1,23 +1,18 @@
-package com.tutorial.novelproject;
+package com.tutorial.novelproject.ui.home;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Menu;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.tutorial.novelproject.R;
+import com.tutorial.novelproject.ui.download.DownloadFragment;
 import com.tutorial.novelproject.ui.list.ListFragment;
-import com.tutorial.novelproject.ui.listnovel.ListNovelFragment;
+import com.tutorial.novelproject.ui.home.ListNovelFragment;
+import com.tutorial.novelproject.ui.search.SearchFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -51,9 +46,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                new ListFragment()).commit();
-            toolbar.setTitle("Danh sách");
-            navigationView.setCheckedItem(R.id.nav_list);
+                new ListNovelFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_list_novel);
         }
     }
 
@@ -69,6 +63,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                     new ListFragment()).commit();
                 toolbar.setTitle("Danh sách");
+                break;
+            case R.id.nav_search:
+                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                    new SearchFragment()).commit();
+                toolbar.setTitle("Tìm kiếm");
+                break;
+            case R.id.nav_download:
+                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                    new DownloadFragment()).commit();
+                toolbar.setTitle("Tải xuống");
                 break;
         }
 
